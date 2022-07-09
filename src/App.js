@@ -12,6 +12,7 @@ function App() {
         <Route path='/' element={<SignInSide />} />
         <Route exact path='/create' element={<AddressForm />} />
         <Route exact path='/budget' element={<DashboardBudgets />} />
+        <Route path='*' element={<SignInSide />} />
       </Routes>
     </>
   );
