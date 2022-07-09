@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import s from "./create.module.css";
 import { Button } from "@mui/material";
-
+import Divider from "@mui/material/Divider";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import ContentPasteGoIcon from "@mui/icons-material/ContentPasteGo";
@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createBudget } from "../../redux/actions/budgets.actions";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import DenseAppBar from "../AppBar";
 
 export default function AddressForm() {
   let navigate = useNavigate();
@@ -32,7 +33,6 @@ export default function AddressForm() {
   useEffect(() => {
     if (typeof user.accessToken === "string") {
       localStorage.setItem("token", user.accessToken);
-      console.log("HOLAa");
     }
   });
 
@@ -83,115 +83,119 @@ export default function AddressForm() {
   }
 
   return (
-    <div className={s.divForm}>
-      {alert && (
-        <Stack sx={{ width: "100%" }} spacing={2}>
-          <Alert
-            severity="error"
-            onClose={() => {
-              setAlert(false);
-            }}
-          >
-            This is a success alert — check it out!
-          </Alert>
-        </Stack>
-      )}
-      <Typography variant="h6" gutterBottom>
-        Crear presupuesto
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            onChange={handleChangeName}
-            required
-            id="firstName"
-            name="name"
-            value={name}
-            label="Nombre del presupuesto"
-            fullWidth
-            autoComplete="given-name"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={5.5}>
-          <TextField
-            onChange={handleChangeToken}
-            required
-            id="lastName"
-            name="token"
-            label="Access token"
-            value={token}
-            fullWidth
-            autoComplete="family-name"
-            variant="standard"
-          />
-        </Grid>
+    <div>
+      <DenseAppBar />
+      <div className={s.divForm}>
+        {alert && (
+          <Stack sx={{ width: "100%" }} spacing={2}>
+            <Alert
+              severity="error"
+              onClose={() => {
+                setAlert(false);
+              }}
+            >
+              Quedaron campos sin completar!
+            </Alert>
+          </Stack>
+        )}
+        <Typography variant="h4" gutterBottom sx={{ marginBottom: 6 }}>
+          Crear presupuesto
+          <Divider />
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              onChange={handleChangeName}
+              required
+              id="firstName"
+              name="name"
+              value={name}
+              label="Nombre del presupuesto"
+              fullWidth
+              autoComplete="given-name"
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={12} sm={5.5}>
+            <TextField
+              onChange={handleChangeToken}
+              required
+              id="lastName"
+              name="token"
+              label="Access token"
+              value={token}
+              fullWidth
+              autoComplete="family-name"
+              variant="standard"
+            />
+          </Grid>
 
-        <Grid item xs={12} sm={0.5}>
-          <Button onClick={handlePaste}>
-            <Avatar>
-              <ContentPasteGoIcon />
-            </Avatar>
-          </Button>
-        </Grid>
+          <Grid item xs={12} sm={0.5}>
+            <Button onClick={handlePaste}>
+              <Avatar>
+                <ContentPasteGoIcon />
+              </Avatar>
+            </Button>
+          </Grid>
 
-        {budgets.map((p, i) => (
-          <div key={i} className={s.divFields}>
-            <div className={s.divDelete}>
-              <Button
-                onClick={() => handleDelete(i)}
-                className={s.buttonDelete}
-                variant="contained"
-                color="error"
-              >
-                <CancelIcon />
-              </Button>
+          {budgets.map((p, i) => (
+            <div key={i} className={s.divFields}>
+              <div className={s.divDelete}>
+                <Button
+                  onClick={() => handleDelete(i)}
+                  className={s.buttonDelete}
+                  variant="contained"
+                  color="error"
+                >
+                  <CancelIcon />
+                </Button>
+              </div>
+              <Grid container spacing={3}>
+                <FieldsForm
+                  onChange={(e) => handleChange(e, i)}
+                  name="name"
+                  label={"Nombre"}
+                  value={p.name}
+                />
+                <FieldsForm
+                  onChange={(e) => handleChange(e, i)}
+                  name="amount"
+                  label={"Monto"}
+                  value={p.amount}
+                  type="number"
+                />
+                <FieldsForm
+                  onChange={(e) => handleChange(e, i)}
+                  type="select-category"
+                  name="category"
+                  label={"Categoria"}
+                  value={p.category}
+                />
+                <FieldsForm
+                  onChange={(e) => handleChange(e, i)}
+                  type="select-type"
+                  name="isExpense"
+                  label={"Tipo"}
+                  value={p.isExpense}
+                />
+              </Grid>
             </div>
-            <Grid container spacing={3}>
-              <FieldsForm
-                onChange={(e) => handleChange(e, i)}
-                name="name"
-                label={"Nombre"}
-                value={p.name}
-              />
-              <FieldsForm
-                onChange={(e) => handleChange(e, i)}
-                name="amount"
-                label={"Monto"}
-                value={p.amount}
-                type="number"
-              />
-              <FieldsForm
-                onChange={(e) => handleChange(e, i)}
-                type="select-category"
-                name="category"
-                label={"Categoria"}
-                value={p.category}
-              />
-              <FieldsForm
-                onChange={(e) => handleChange(e, i)}
-                type="select-type"
-                name="isExpense"
-                label={"Tipo"}
-                value={p.isExpense}
-              />
-            </Grid>
-          </div>
-        ))}
-      </Grid>
+          ))}
+        </Grid>
 
-      <Button onClick={handleClick} className={s.addButtonForm}>
-        <AddCircleIcon color="action" fontSize="large" />
-      </Button>
+        <Button onClick={handleClick} className={s.addButtonForm}>
+          <AddCircleIcon color="action" fontSize="large" />
+        </Button>
 
-      <Button
-        onClick={handleSubmit}
-        className={s.buttonForm}
-        variant="contained"
-        color="primary"
-      >
-        Guardar Presupuesto
-      </Button>
+        <Button
+          onClick={handleSubmit}
+          className={s.buttonForm}
+          variant="contained"
+          color="primary"
+        >
+          Guardar Presupuesto
+        </Button>
+      </div>
     </div>
   );
 }
