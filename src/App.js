@@ -1,24 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
+import AddressForm from './components/FormCreate';
+import DashboardBudgets from './components/Dashboard';
+import SignInSide from './components/FormAuth';
+import { Route, Routes } from 'react-router-dom'
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route path='/' element={<SignInSide />} />
+        <Route exact path='/create' element={<AddressForm />} />
+        <Route exact path='/budget' element={<DashboardBudgets />} />
+      </Routes>
+    </>
   );
 }
 

@@ -1,0 +1,5 @@
+.divDashboard {
+  display: flex !important;
+  justify-content: center ;
+  max-width: fit-content;
+}

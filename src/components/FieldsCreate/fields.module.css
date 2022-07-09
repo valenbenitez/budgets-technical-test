@@ -1,0 +1,15 @@
+/* .divForm {
+  padding: 1rem;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid lightgray;
+} */
+
+@media screen and (min-width: 800px) {
+  .divForm {
+    margin-top: 3rem;
+  }
+}
