@@ -41,8 +41,9 @@ html {
   justify-content: flex-end;
 }
 
-/* .buttonDelete{
-} */
+.navLink {
+  text-decoration: none !important;
+}
 
 @media screen and (min-width: 800px) {
   .divForm {

@@ -11,13 +11,15 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import CustomizedSnackbars from "../Alert";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import { signIn } from "../../redux/actions/auth.actions";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -42,11 +44,18 @@ const theme = createTheme();
 export default function SignInSide() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const error = useSelector((state) => state.error);
+  const user = useSelector((state) => state.user);
   const [alert, setAlert] = React.useState(false);
   const [input, setInput] = React.useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    user.id && navigate("../create");
+    typeof error === "string" && setAlert(true);
+  }, [user, error]);
 
   function handleChange(e) {
     setInput({
@@ -55,12 +64,11 @@ export default function SignInSide() {
     });
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.email === "" || input.password === "") return setAlert(true);
     dispatch(signIn(input));
-    navigate("../create");
-  }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -73,7 +81,7 @@ export default function SignInSide() {
                 setAlert(false);
               }}
             >
-              This is a success alert — check it out!
+              Complete los datos correctamente porfavor!
             </Alert>
           </Stack>
         </>

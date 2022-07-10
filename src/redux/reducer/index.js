@@ -1,13 +1,19 @@
-import { GET_BUDGETS, GET_USER, CLEAR_BUDGET } from "../constants"
+import { GET_BUDGETS, GET_USER, CLEAR_BUDGET, ERROR } from "../constants"
 
 const initialState = {
     budgets: [],
-    user: []
+    user: [],
+    error: []
 }
 
 const rootReducer = (state = initialState, action) => {
     const { payload, type } = action
     switch (type) {
+        case ERROR:
+            return {
+                ...state,
+                error: payload
+            }
         case GET_BUDGETS:
             return {
                 ...state,
@@ -18,7 +24,7 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 user: payload
             }
-        case GET_USER:
+        case CLEAR_BUDGET:
             return {
                 ...state,
                 budgets: []

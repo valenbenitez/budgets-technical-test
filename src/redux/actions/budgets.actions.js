@@ -11,7 +11,6 @@ export const createBudget = (newBudget, token) => {
                 payload: data
             })
         } catch (error) {
-            console.log(error);
             return error
         }
     }
@@ -27,7 +26,6 @@ export const getUserBudget = (id, token) => {
                 payload: data
             })
         } catch (error) {
-            console.log(error)
             return error
         }
     }

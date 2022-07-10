@@ -55,14 +55,12 @@ export default function DashboardBudgets() {
       let id = localStorage.getItem("id");
       dispatch(getUserBudget(id, token));
     }
-    return () => {
-      dispatch(clearBudget());
-      localStorage.removeItem("id");
-    };
-  });
+  }, [budgets, token]);
 
   function handleClick(e) {
     e.preventDefault();
+    dispatch(clearBudget());
+    localStorage.removeItem("id");
     navigate("../create");
   }
 

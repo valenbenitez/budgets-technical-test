@@ -7,14 +7,13 @@ import { Button } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
-import ContentPasteGoIcon from "@mui/icons-material/ContentPasteGo";
-import Avatar from "@mui/material/Avatar";
+import { NavLink } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import FieldsForm from "../FieldsCreate";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createBudget } from "../../redux/actions/budgets.actions";
+import { clearBudget, createBudget } from "../../redux/actions/budgets.actions";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import DenseAppBar from "../AppBar";
@@ -23,18 +22,28 @@ export default function AddressForm() {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [alert, setAlert] = useState(false);
-  const [token, setToken] = useState("");
+  const [alertToken, setAlertToken] = useState(false);
+  const token = localStorage.getItem("token");
   const [name, setName] = useState("");
   const user = useSelector((state) => state.user);
   const [budgets, setBudgets] = useState([
     { name: "", category: "", amount: "", isExpense: false },
   ]);
 
+  // useEffect(() => {
+  //   !token && setAlertToken(true);
+  //   token && setAlertToken(false);
+  // }, [token]);
+
   useEffect(() => {
+    dispatch(clearBudget());
+    localStorage.removeItem("id");
     if (typeof user.accessToken === "string") {
       localStorage.setItem("token", user.accessToken);
     }
-  });
+    !token && setAlertToken(true);
+    token && setAlertToken(false);
+  }, [user, token]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -44,9 +53,11 @@ export default function AddressForm() {
       }
     }
     let ultiBudget = { name: name, rows: budgets };
+    if (!token) {
+      return;
+    }
     dispatch(createBudget(ultiBudget, token));
     setName("");
-    setToken("");
     setBudgets([{ name: "", category: "", amount: "", isExpense: false }]);
     navigate("../budget");
   }
@@ -61,11 +72,6 @@ export default function AddressForm() {
     setName(e.target.value);
   }
 
-  function handleChangeToken(e) {
-    setToken(e.target.value);
-    localStorage.setItem("token", e.target.value);
-  }
-
   function handleClick() {
     const newBudget = { name: "", category: "", amount: "", isExpense: false };
     setBudgets([...budgets, newBudget]);
@@ -77,15 +83,30 @@ export default function AddressForm() {
     setBudgets(previosBudget);
   }
 
-  function handlePaste() {
-    let tokenStorage = localStorage.getItem("token");
-    setToken(tokenStorage);
+  function handleLink() {
+    setAlertToken(false);
   }
 
   return (
     <div>
       <DenseAppBar />
       <div className={s.divForm}>
+        {alertToken && (
+          <Stack sx={{ width: "100%" }} spacing={2}>
+            <Alert
+              severity="warning"
+              onClose={() => {
+                setAlert(false);
+              }}
+            >
+              {/* Registrate para poder crear tu presupuesto! */}
+              <NavLink onClick={handleLink} className={s.navLink} to={"/"}>
+                Registrese{" "}
+              </NavLink>
+              para poder crear tu presupuesto!
+            </Alert>
+          </Stack>
+        )}
         {alert && (
           <Stack sx={{ width: "100%" }} spacing={2}>
             <Alert
@@ -103,7 +124,7 @@ export default function AddressForm() {
           <Divider />
         </Typography>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={12}>
             <TextField
               onChange={handleChangeName}
               required
@@ -116,7 +137,7 @@ export default function AddressForm() {
               variant="standard"
             />
           </Grid>
-          <Grid item xs={12} sm={5.5}>
+          {/* <Grid item xs={12} sm={6}>
             <TextField
               onChange={handleChangeToken}
               required
@@ -128,15 +149,7 @@ export default function AddressForm() {
               autoComplete="family-name"
               variant="standard"
             />
-          </Grid>
-
-          <Grid item xs={12} sm={0.5}>
-            <Button onClick={handlePaste}>
-              <Avatar>
-                <ContentPasteGoIcon />
-              </Avatar>
-            </Button>
-          </Grid>
+          </Grid> */}
 
           {budgets.map((p, i) => (
             <div key={i} className={s.divFields}>
