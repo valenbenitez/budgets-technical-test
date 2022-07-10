@@ -30,11 +30,6 @@ export default function AddressForm() {
     { name: "", category: "", amount: "", isExpense: false },
   ]);
 
-  // useEffect(() => {
-  //   !token && setAlertToken(true);
-  //   token && setAlertToken(false);
-  // }, [token]);
-
   useEffect(() => {
     dispatch(clearBudget());
     localStorage.removeItem("id");
@@ -43,7 +38,7 @@ export default function AddressForm() {
     }
     !token && setAlertToken(true);
     token && setAlertToken(false);
-  }, [user, token]);
+  }, [user, token]);//eslint-disable-line
 
   function handleSubmit(e) {
     e.preventDefault();
