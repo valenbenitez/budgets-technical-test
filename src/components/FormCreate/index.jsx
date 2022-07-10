@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearBudget, createBudget } from "../../redux/actions/budgets.actions";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Avatar from "@mui/material/Avatar";
 import DenseAppBar from "../AppBar";
 
 export default function AddressForm() {
@@ -38,7 +39,7 @@ export default function AddressForm() {
     }
     !token && setAlertToken(true);
     token && setAlertToken(false);
-  }, [user, token]);//eslint-disable-line
+  }, [user, token]); //eslint-disable-line
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -132,30 +133,14 @@ export default function AddressForm() {
               variant="standard"
             />
           </Grid>
-          {/* <Grid item xs={12} sm={6}>
-            <TextField
-              onChange={handleChangeToken}
-              required
-              id="lastName"
-              name="token"
-              label="Access token"
-              value={token}
-              fullWidth
-              autoComplete="family-name"
-              variant="standard"
-            />
-          </Grid> */}
 
           {budgets.map((p, i) => (
             <div key={i} className={s.divFields}>
               <div className={s.divDelete}>
-                <Button
-                  onClick={() => handleDelete(i)}
-                  className={s.buttonDelete}
-                  variant="contained"
-                  color="error"
-                >
-                  <CancelIcon />
+                <Button onClick={() => handleDelete(i)}>
+                  <Avatar sx={{ bgcolor: "red" }}>
+                    <CancelIcon />
+                  </Avatar>
                 </Button>
               </div>
               <Grid container spacing={3}>
